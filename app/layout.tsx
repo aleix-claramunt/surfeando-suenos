@@ -1,15 +1,9 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Surfeando Sueños - Escuela de Surf",
-  description: "Learn to surf with a professional instructor. From beginners to advanced surfers, we offer personalized lessons to help you catch the perfect wave.",
-};
 
 export default function RootLayout({
   children,

@@ -4,8 +4,8 @@ export default function PoliticaPrivacidadPage() {
   return (
     <>
       <Navbar alwaysSolid />
-      <div className="bg-gray-50 py-20">
-        <main className="max-w-3xl mx-auto py-20 px-4 bg-gray-50">
+      <div className="bg-gray-50 py-10">
+        <main className="max-w-3xl mx-auto py-4 px-4 bg-gray-50">
           <h1 className="text-3xl font-bold mb-8">Política de privacidad</h1>
           
           <div className="space-y-6 text-gray-700">
@@ -15,7 +15,7 @@ export default function PoliticaPrivacidadPage() {
                 En cumplimiento del deber de información dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo, de 27 de abril de 2016, relativo a la protección de las personas físicas (RGPD), se facilitan a continuación los siguientes datos de información general de este sitio web:
               </p>
               <ul className="list-disc pl-6 space-y-2">
-                <li><strong>Responsable del tratamiento:</strong> Josep Noya Corral</li>
+                <li><strong>Responsable del tratamiento:</strong> ${process.env.NEXT_PUBLIC_NAME}</li>
                 <li><strong>Denominación comercial:</strong> Surfeando Sueños</li>
                 <li><strong>Email:</strong> <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`} className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</a></li>
                 <li><strong>Teléfono:</strong> <a href={`tel:${process.env.NEXT_PUBLIC_CONTACT_PHONE_LINK}`} className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_CONTACT_PHONE}</a></li>

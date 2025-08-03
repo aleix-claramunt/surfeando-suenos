@@ -2,6 +2,117 @@
 
 import Image from "next/image";
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+
+const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    
+    try {
+      // Enviar email usando mailto
+      const subject = 'Nuevo mensaje desde Surfeando Sueños'
+      const body = `Nombre: ${formData.name}
+Email: ${formData.email}
+Mensaje: ${formData.message}`
+      
+      const mailtoUrl = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      
+      window.location.href = mailtoUrl
+      setSubmitStatus('success')
+      
+      // Reset form after a delay
+      setTimeout(() => {
+        setFormData({ name: '', email: '', message: '' })
+        setSubmitStatus('idle')
+      }, 2000)
+      
+    } catch (error) {
+      console.error(error);
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">Nombre *</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          value={formData.name}
+          onChange={handleChange}
+          required 
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500" 
+        />
+      </div>
+      <div>
+        <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">Email *</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          value={formData.email}
+          onChange={handleChange}
+          required 
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500" 
+        />
+      </div>
+      <div>
+        <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">Mensaje *</label>
+        <textarea 
+          id="message" 
+          name="message" 
+          rows={4} 
+          value={formData.message}
+          onChange={handleChange}
+          required 
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500" 
+          placeholder="¿En qué podemos ayudarte?" 
+        />
+      </div>
+      
+      {submitStatus === 'success' && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+          ¡Mensaje enviado! Se abrirá tu cliente de email.
+        </div>
+      )}
+      
+      {submitStatus === 'error' && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          Error al enviar el mensaje. Inténtalo de nuevo.
+        </div>
+      )}
+      
+      <button 
+        type="submit" 
+        disabled={isSubmitting}
+        className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 inline-block text-center"
+      >
+        {isSubmitting ? 'Enviando...' : 'Enviar 📧'}
+      </button>
+    </form>
+  )
+}
 
 export default function Home() {
   return (
@@ -51,7 +162,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
               Viajes de surf que nacen de un sueño, se viven en el mar.
             </p>
-            <a href="#viajes" className="bg-coral hover:bg-coral/90 text-white font-bold py-3 px-8 rounded-full text-lg transition-colors shadow-lg inline-block">
+            <a href="#viajes" className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-5 px-10 rounded-full shadow-lg transition duration-200 text-lg">
               Explora nuestros viajes
             </a>
           </motion.div>
@@ -59,12 +170,12 @@ export default function Home() {
       </section>
 
       {/* Sobre nosotros Section */}
-      <section id="sobre-nosotros" className="py-20 px-4 bg-gray-50 scroll-mt-12">
+      <section id="sobre-nosotros" className="pt-16 pb-8 px-4 bg-gray-50 scroll-mt-12">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">¡Bienvenido a Surfeando Sueños!</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-10">¡Bienvenido a Surfeando Sueños!</h2>
           <div className="text-center max-w-4xl mx-auto">
             {/* Story Content */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               <p className="text-gray-800 text-lg leading-relaxed mb-6">
                 A veces, un solo instante puede cambiarlo todo. Para mí, fue aquel día en que, con 20 años, llegué por sorpresa a la Escuela Cántabra de Surf. Desde la primera ola, supe que había encontrado algo que daría sentido a cada día.
                 <br></br>
@@ -116,275 +227,186 @@ export default function Home() {
       </section>
 
       {/* Viajes Section */}
-      <section id="viajes" className="py-20 px-4 bg-gray-50 scroll-mt-12">
+      <section id="viajes" className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Viajes</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-6">Viajes</h2>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Semana de Surf en Imsouane */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            {/* Full Experience: Soul Wave */}
             <div className="bg-white rounded-lg shadow-xl overflow-hidden border-2 border-gray-300">
               <div className="relative h-64">
                 <Image
-                  src="/imsouane.jpg"
-                  alt="Imsouane surf spot"
+                  src="/gallery1.jpg"
+                  alt="Soul Wave Experience"
                   fill
                   className="object-cover"
                 />
               </div>
-              <div className="p-8">
-                <h3 className="text-2xl font-bold text-black mb-4">Semana de Surf en Imsouane</h3>
-                <p className="text-gray-800 mb-6 text-lg">
-                  Disfruta de una semana completa de surf en uno de los mejores spots de Marruecos. 
-                  Olas perfectas para todos los niveles en un ambiente auténtico y relajado.
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-black mb-3">Full Experience: Soul Wave</h3>
+                <p className="text-gray-800 mb-4 text-sm">
+                  Ideal para quienes buscan equilibrio, conexión y aventura en un solo viaje.
                 </p>
                 
-                <div className="space-y-4 mb-6">
+                <div className="space-y-3 mb-4">
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Alojamiento en riad tradicional</span>
+                    <span className="text-black font-medium text-sm">Alojamiento en Surf house</span>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Clases de surf diarias</span>
+                    <span className="text-black font-medium text-sm">Pensión completa</span>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Equipamiento incluido</span>
+                    <span className="text-black font-medium text-sm">Clases de surf</span>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Comidas tradicionales</span>
+                    <span className="text-black font-medium text-sm">Clases de yoga</span>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Transporte desde aeropuerto</span>
+                    <span className="text-black font-medium text-sm">Material incluido</span>
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center mb-4">
                   <div>
-                    <span className="text-sm text-gray-600 font-bold">Nivel requerido:</span>
-                    <span className="text-black font-bold ml-2">Principiante - Intermedio</span>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600 font-bold">Duración:</span>
-                    <span className="text-black font-bold ml-2">7 días</span>
+                    <span className="text-xs text-gray-600 font-bold">Duración:</span>
+                    <span className="text-black font-bold ml-1 text-sm">5-7 días</span>
                   </div>
                 </div>
-                
-                <button className="w-full bg-gray-400 text-gray-600 font-bold py-4 px-6 rounded-full shadow-lg text-lg cursor-not-allowed opacity-60" disabled>
+                <a href="/soul-wave" className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 inline-block text-center">
                   Más información
-                </button>
+                </a>
               </div>
             </div>
 
-            {/* Semana de Surf en Taghazout */}
+            {/* Easy Flow */}
             <div className="bg-white rounded-lg shadow-xl overflow-hidden border-2 border-gray-300">
               <div className="relative h-64">
                 <Image
-                  src="/taghazout.jpg"
-                  alt="Taghazout surf spot"
+                  src="/gallery2.jpg"
+                  alt="Easy Flow Experience"
                   fill
                   className="object-cover"
                 />
               </div>
-              <div className="p-8">
-                <h3 className="text-2xl font-bold text-black mb-4">Semana de Surf en Taghazout</h3>
-                <p className="text-gray-800 mb-6 text-lg">
-                  Explora las famosas olas de Taghazout, el paraíso del surf en Marruecos. 
-                  Desde olas suaves para principiantes hasta tubos para expertos.
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-black mb-3">Easy Flow</h3>
+                <p className="text-gray-800 mb-4 text-sm">
+                  Perfecto para quienes buscan flexibilidad y confort sin perder la esencia del surf trip.
                 </p>
                 
-                <div className="space-y-4 mb-6">
+                <div className="space-y-3 mb-4">
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Alojamiento en surf camp</span>
+                    <span className="text-black font-medium text-sm">Alojamiento en Surf house</span>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Guía local experto</span>
+                    <span className="text-black font-medium text-sm">Desayuno incluido</span>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Acceso a múltiples spots</span>
+                    <span className="text-black font-medium text-sm">Clases de surf</span>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Yoga y bienestar</span>
+                    <span className="text-black font-medium text-sm">Clases de yoga</span>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-black font-medium">Cultura local</span>
+                    <span className="text-black font-medium text-sm">Material Incluido</span>
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center mb-4">
                   <div>
-                    <span className="text-sm text-gray-600 font-bold">Nivel requerido:</span>
-                    <span className="text-black font-bold ml-2">Todos los niveles</span>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600 font-bold">Duración:</span>
-                    <span className="text-black font-bold ml-2">7 días</span>
+                    <span className="text-xs text-gray-600 font-bold">Duración:</span>
+                    <span className="text-black font-bold ml-1 text-sm">5-7 días</span>
                   </div>
                 </div>
                 
-                <button className="w-full bg-gray-400 text-gray-600 font-bold py-4 px-6 rounded-full shadow-lg text-lg cursor-not-allowed opacity-60" disabled>
+                <a href="/easy-flow" className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 inline-block text-center">
                   Más información
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Testimonials Section (Future) */}
-          <div className="text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">Experiencias de nuestros viajeros</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white p-6 rounded-lg border-2 border-gray-300">
-                <div className="w-16 h-16 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">A</span>
-                </div>
-                <p className="text-black italic mb-4 font-medium">
-                  &quot;Una experiencia increíble. Josep nos llevó a spots que nunca hubiéramos encontrado solos.&quot;
-                </p>
-                <p className="text-gray-900 font-bold">- Aleix C.</p>
-              </div>
-              
-              <div className="bg-white p-6 rounded-lg border-2 border-gray-300">
-                <div className="w-16 h-16 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">M</span>
-                </div>
-                <p className="text-black italic mb-4 font-medium">
-                &quot;Más que un viaje de surf, fue una experiencia de vida. Totalmente recomendado.&quot;
-                </p>
-                <p className="text-gray-900 font-bold">- María L.</p>
-              </div>
-              
-              <div className="bg-white p-6 rounded-lg border-2 border-gray-300">
-                <div className="w-16 h-16 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">C</span>
-                </div>
-                <p className="text-black italic mb-4 font-medium">
-                &quot;La autenticidad y pasión de Josep se nota en cada detalle del viaje.&quot;
-                </p>
-                <p className="text-gray-900 font-bold">- Carlos R.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Colaboraciones con escuelas Section */}
-      <section id="colaboraciones" className="py-20 px-4 bg-gray-50 scroll-mt-12">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Colaboraciones con escuelas</h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Propuesta */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Nuestra Propuesta</h3>
-              <p className="text-gray-800 text-lg leading-relaxed mb-6">
-                En Surfeando Sueños nos especializamos en captar y organizar grupos de surfistas 
-                para que las escuelas puedan enfocarse en lo que mejor saben hacer: enseñar surf.
-              </p>
-              
-              <div className="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300">
-                <h4 className="text-xl font-bold text-gray-900 mb-4">¿Qué ofrecemos?</h4>
-                <ul className="space-y-3">
-                  <li className="flex items-start">
-                    <svg className="w-6 h-6 text-orange-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-800">Captación y gestión de grupos internacionales</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-6 h-6 text-orange-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-800">Organización logística completa</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-6 h-6 text-orange-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-800">Marketing y promoción de destinos</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-6 h-6 text-orange-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-800">Soporte en idiomas (español, inglés, catalán)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-6 h-6 text-orange-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-800">Gestión de reservas y pagos</span>
-                  </li>
-                </ul>
+                </a>
               </div>
             </div>
 
-            {/* Beneficios */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Beneficios para las Escuelas</h3>
-              
-              <div className="grid grid-cols-1 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-4">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                      </svg>
-                    </div>
-                    <h4 className="text-lg font-bold text-gray-900">Mayor Ocupación</h4>
+            {/* Free Spirit */}
+            <div className="bg-white rounded-lg shadow-xl overflow-hidden border-2 border-gray-300">
+              <div className="relative h-64">
+                <Image
+                  src="/gallery3.jpg"
+                  alt="Free Spirit Experience"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-black mb-3">Free Spirit</h3>
+                <p className="text-gray-800 mb-4 text-sm">
+                  Diseñado para surfistas independientes que valoran el bienestar y la comunidad
+                </p>
+                
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-black font-medium text-sm">Alojamiento en Surf house</span>
                   </div>
-                  <p className="text-gray-800">Aumenta tu ocupación con grupos organizados y garantiza ingresos estables durante todo el año.</p>
-                </div>
-
-                <div className="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-4">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-lg font-bold text-gray-900">Enfoque en la Enseñanza</h4>
+                  <div className="flex items-center">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-black font-medium text-sm">Pensión completa</span>
                   </div>
-                  <p className="text-gray-800">Dedícate exclusivamente a enseñar surf mientras nosotros nos encargamos de la gestión comercial.</p>
-                </div>
-
-                <div className="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-4">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-lg font-bold text-gray-900">Nuevos Mercados</h4>
+                  <div className="flex items-center">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-black font-medium text-sm">Clases de yoga</span>
                   </div>
-                  <p className="text-gray-800">Accede a mercados internacionales y diversifica tu base de clientes sin esfuerzo adicional.</p>
+                  <div className="flex items-center">
+                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-black font-medium text-sm">Material incluido</span>
+                  </div>
                 </div>
+                <div className="mt-12"></div>
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <span className="text-xs text-gray-600 font-bold">Duración:</span>
+                    <span className="text-black font-bold ml-1 text-sm">5-7 días</span>
+                  </div>
+                </div>
+                <a href="/free-spirit" className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 inline-block text-center">
+                  Más información
+                </a>
               </div>
             </div>
           </div>
@@ -392,10 +414,10 @@ export default function Home() {
       </section>
 
       {/* Galería Section */}
-      <section id="galeria"className="py-20 px-4 bg-gray-50 scroll-mt-12">
+      <section id="galeria"className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Galería</h2>
-          <p className="text-center text-gray-700 mb-12 text-lg max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-2">Galería</h2>
+          <p className="text-center text-gray-700 mb-8 text-lg max-w-2xl mx-auto">
             Descubre algunos de los mejores momentos y paisajes de nuestros últimos viajes de surf.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -422,28 +444,14 @@ export default function Home() {
       </section>
 
       {/* Contacto Section */}
-      <section id="contacto" className="py-20 px-4 bg-gray-50 scroll-mt-12">
+      <section id="contacto" className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Contacto</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-8">Contacto</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="bg-white p-8 rounded-lg shadow-lg border-2 border-gray-200">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Envíanos un mensaje</h3>
-              <form className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">Nombre *</label>
-                  <input type="text" id="name" name="name" required className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">Email *</label>
-                  <input type="email" id="email" name="email" required className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">Mensaje *</label>
-                  <textarea id="message" name="message" rows={5} required className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="¿En qué podemos ayudarte?" />
-                </div>
-                <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg transition-colors shadow-lg text-lg">Enviar</button>
-              </form>
+              <ContactForm />
             </div>
             {/* Contact Info */}
             <div className="flex flex-col justify-center bg-white p-8 rounded-lg shadow-lg border-2 border-gray-200">
@@ -451,7 +459,7 @@ export default function Home() {
               <ul className="space-y-4 text-lg">
               <li>
                 <span className="font-bold text-gray-800">Nombre:</span>
-                <span className="text-gray-800"> Josep Noya Corral</span>
+                <span className="text-gray-800"> {process.env.NEXT_PUBLIC_NAME}</span>
               </li>               
                 <li><span className="font-bold text-gray-800">Email:</span> <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`} className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</a></li>
                 <li><span className="font-bold text-gray-800">Teléfono:</span> <a href={`tel:${process.env.NEXT_PUBLIC_CONTACT_PHONE_LINK}`} className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_CONTACT_PHONE}</a></li>

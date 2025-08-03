@@ -10,7 +10,6 @@ A modern, responsive website for a surf school built with Next.js, TypeScript, a
 - Fully customizable with Tailwind CSS
 - Contact form for inquiries
 - Detailed lesson information and pricing
-- About page with team information and testimonials
 
 ## Prerequisites
 
@@ -39,6 +38,7 @@ NEXT_PUBLIC_CONTACT_PHONE=
 NEXT_PUBLIC_CONTACT_PHONE_LINK=
 NEXT_PUBLIC_INSTAGRAM_HANDLE=
 NEXT_PUBLIC_INSTAGRAM_URL=
+NEXT_PUBLIC_NAME=
 ```
 
 4. Run the development server:

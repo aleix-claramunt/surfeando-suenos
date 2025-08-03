@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter, usePathname } from 'next/navigation'
 
 export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean } = {}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -47,11 +48,8 @@ export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean 
             <NavLink href="/">Inicio</NavLink>
             <NavLink href="#sobre-nosotros">Sobre nosotros</NavLink>
             <NavLink href="#viajes">Viajes</NavLink>
-            <NavLink href="#colaboraciones">Colaboraciones</NavLink>
             <NavLink href="#galeria">Galería</NavLink>
-            <Link href="#contacto" className="bg-coral hover:bg-coral/90 text-white px-6 py-2 rounded-full transition-colors shadow-md font-semibold">
-              Contacto
-            </Link>
+            <NavLink href="#contacto">Contacto</NavLink>
           </div>
 
           {/* Mobile Menu Button */}
@@ -93,9 +91,6 @@ export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean 
               <MobileNavLink href="#viajes" onClick={() => setIsMenuOpen(false)}>
                 Viajes
               </MobileNavLink>
-              <MobileNavLink href="#colaboraciones" onClick={() => setIsMenuOpen(false)}>
-                Colaboraciones
-              </MobileNavLink>
               <MobileNavLink href="#galeria" onClick={() => setIsMenuOpen(false)}>
                 Galería
               </MobileNavLink>
@@ -111,9 +106,20 @@ export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean 
 }
 
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const router = useRouter()
+  const pathname = usePathname()
+  
+  const handleClick = (e: React.MouseEvent) => {
+    if (href.startsWith('#') && pathname !== '/') {
+      e.preventDefault()
+      router.push('/' + href)
+    }
+  }
+
   return (
     <Link
       href={href}
+      onClick={handleClick}
       className="text-white hover:text-coral transition-colors font-semibold text-lg"
     >
       {children}
@@ -130,10 +136,21 @@ function MobileNavLink({
   onClick: () => void
   children: React.ReactNode
 }) {
+  const router = useRouter()
+  const pathname = usePathname()
+  
+  const handleClick = (e: React.MouseEvent) => {
+    if (href.startsWith('#') && pathname !== '/') {
+      e.preventDefault()
+      router.push('/' + href)
+    }
+    onClick()
+  }
+
   return (
     <Link
       href={href}
-      onClick={onClick}
+      onClick={handleClick}
       className="text-white hover:text-coral transition-colors block py-2 font-semibold text-lg"
     >
       {children}
