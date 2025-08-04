@@ -80,7 +80,7 @@ export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean 
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden bg-ocean-900 absolute left-0 right-0 p-4 shadow-lg border-b border-ocean-700">
+          <div className="md:hidden bg-blue-900 absolute left-0 right-0 p-4 shadow-lg border-b border-blue-700" style={{backgroundColor: '#1e3a8a'}}>
             <div className="flex flex-col space-y-4">
               <MobileNavLink href="/" onClick={() => setIsMenuOpen(false)}>
                 Inicio
@@ -94,9 +94,9 @@ export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean 
               <MobileNavLink href="#galeria" onClick={() => setIsMenuOpen(false)}>
                 Galería
               </MobileNavLink>
-              <Link href="#contacto" onClick={() => setIsMenuOpen(false)} className="bg-coral hover:bg-coral/90 text-white px-6 py-2 rounded-full transition-colors w-full shadow-md font-semibold text-center block">
+              <MobileNavLink href="#contacto" onClick={() => setIsMenuOpen(false)}>
                 Contacto
-              </Link>
+              </MobileNavLink>
             </div>
           </div>
         )}
