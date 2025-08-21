@@ -70,7 +70,7 @@ export default function SoulWavePage() {
           <PackageCard
             title="Pensión Completa / 7 Días"
             duration="Duración: 7 días / 6 noches / 5 días completos de actividad"
-            price="Desde 660€"
+            price="Desde 720€"
             features={[
               'Alojamiento en Surf house en habitación doble: opción habitación privada o compartida.',
               'Pensión completa (6 desayunos, 6 comidas, 6 cenas)',
@@ -84,7 +84,7 @@ export default function SoulWavePage() {
           <PackageCard
             title="Pensión Completa / 5 Días"
             duration="Duración: 5 días / 4 noches / 3 días completos de actividad"
-            price="Desde 460€"
+            price="Desde 492€"
             features={[
               'Alojamiento en Surf house en habitación doble: opción habitación privada o compartida.',
               'Pensión completa (4 desayunos, 4 comidas, 4 cenas)',

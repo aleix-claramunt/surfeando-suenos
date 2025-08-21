@@ -19,25 +19,18 @@ const ContactForm = () => {
     setSubmitStatus('idle')
     
     try {
-      // Enviar email usando mailto
-      const subject = 'Nuevo mensaje desde Surfeando Sueños'
-      const body = `Nombre: ${formData.name}
-Email: ${formData.email}
-Mensaje: ${formData.message}`
-      
-      const mailtoUrl = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-      
-      window.location.href = mailtoUrl
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (!res.ok) throw new Error('Request failed')
+
       setSubmitStatus('success')
-      
-      // Reset form after a delay
-      setTimeout(() => {
-        setFormData({ name: '', email: '', message: '' })
-        setSubmitStatus('idle')
-      }, 2000)
-      
+      setFormData({ name: '', email: '', message: '' })
     } catch (error) {
-      console.error(error);
+      console.error(error)
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -62,7 +55,7 @@ Mensaje: ${formData.message}`
           value={formData.name}
           onChange={handleChange}
           required 
-          className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500" 
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors" 
         />
       </div>
       <div>
@@ -74,7 +67,7 @@ Mensaje: ${formData.message}`
           value={formData.email}
           onChange={handleChange}
           required 
-          className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500" 
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors" 
         />
       </div>
       <div>
@@ -86,28 +79,33 @@ Mensaje: ${formData.message}`
           value={formData.message}
           onChange={handleChange}
           required 
-          className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500" 
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors" 
           placeholder="¿En qué podemos ayudarte?" 
         />
       </div>
       
       {submitStatus === 'success' && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-          ¡Mensaje enviado! Se abrirá tu cliente de email.
+        <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>¡Mensaje enviado!</span>
         </div>
       )}
       
       {submitStatus === 'error' && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          Error al enviar el mensaje. Inténtalo de nuevo.
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Hubo un error al enviar el mensaje. Inténtalo de nuevo.</span>
         </div>
       )}
       
       <button 
         type="submit" 
         disabled={isSubmitting}
-        className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 inline-block text-center"
+        className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200"
       >
+        {isSubmitting && (
+          <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg>
+        )}
         {isSubmitting ? 'Enviando...' : 'Enviar 📧'}
       </button>
     </form>
@@ -151,7 +149,7 @@ export default function Home() {
           >
             <Image
               src="/logo.png"
-              alt="Surfeando Suenos Logo"
+              alt="Surfeando Suenos"
               width={200}
               height={200}
               className="mx-auto mb-8"

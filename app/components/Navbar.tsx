@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 
@@ -31,18 +30,7 @@ export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean 
         : 'bg-transparent'
     }`} style={isScrolled ? {backgroundColor: '#1e3a8a'} : {}}>
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="Surfeando Sueños Logo"
-              width={50}
-              height={50}
-              className="w-auto h-12"
-            />
-          </Link>
-
+        <div className="flex items-center h-20 justify-between md:justify-center">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <NavLink href="/">Inicio</NavLink>

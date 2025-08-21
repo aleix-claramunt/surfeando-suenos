@@ -1,4 +1,4 @@
-# Surfeando Sueños - Escuela de Surf
+# Surfeando Sueños
 
 A modern, responsive website for a surf school built with Next.js, TypeScript, and Tailwind CSS.
 
@@ -31,15 +31,7 @@ npm install
 yarn install
 ```
 
-3. Create a `.env.local` file in the root directory and add your environment variables:
-```bash
-NEXT_PUBLIC_CONTACT_EMAIL=
-NEXT_PUBLIC_CONTACT_PHONE=
-NEXT_PUBLIC_CONTACT_PHONE_LINK=
-NEXT_PUBLIC_INSTAGRAM_HANDLE=
-NEXT_PUBLIC_INSTAGRAM_URL=
-NEXT_PUBLIC_NAME=
-```
+3. Create a `.env.local` file in the root directory and add your environment variables
 
 4. Run the development server:
 ```bash
@@ -73,10 +65,3 @@ Replace the placeholder images in the `public` directory with your own:
 - `logo.png`: Your logo
 - `hero-bg.jpg`: Hero section background
 
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)

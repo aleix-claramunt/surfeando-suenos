@@ -58,7 +58,7 @@ export default function FreeSpiritPage() {
             Paquete Free Spirit
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Diseñado para surfistas independientes  bienestar y la {' '}
+            Diseñado para surfistas {' '}
               <span className="text-indigo-600 font-semibold">independientes</span> que valoran el {' '}
               <span className="text-indigo-600 font-semibold">bienestar</span> y la {' '}
               <span className="text-indigo-600 font-semibold">comunidad</span>.{' '}
@@ -70,7 +70,7 @@ export default function FreeSpiritPage() {
           <PackageCard
             title="Solo desayuno / 7 Días"
             duration="Duración: 7 días / 6 noches / 5 días completos de actividad"
-            price="Desde 480€"
+            price="Desde 516€"
             features={[
               'Alojamiento en Surf house en habitación doble: opción habitación privada o compartida.',
               'Pensión completa (6 desayunos, 6 comidas, 6 cenas)',
@@ -83,7 +83,7 @@ export default function FreeSpiritPage() {
           <PackageCard
             title="Solo desayuno / 5 Días"
             duration="Duración: 5 días / 4 noches / 3 días completos de actividad"
-            price="Desde 340€"
+            price="Desde 360€"
             features={[
               'Alojamiento en Surf house en habitación doble: opción habitación privada o compartida.',
               'Pensión completa (4 desayunos, 4 comidas, 4 cenas)',

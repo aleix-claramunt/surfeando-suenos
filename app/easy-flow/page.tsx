@@ -69,7 +69,7 @@ export default function EasyFlowPage() {
           <PackageCard
             title="Solo desayuno / 7 Días"
             duration="Duración: 7 días / 6 noches / 5 días completos de actividad"
-            price="Desde 480€"
+            price="Desde 516€"
             features={[
               'Alojamiento en Surf house en habitación doble: opción habitación privada o compartida.',
               'Régimen de comidas incluido: Desayuno',
@@ -83,7 +83,7 @@ export default function EasyFlowPage() {
           <PackageCard
             title="Solo desayuno / 5 Días"
             duration="Duración: 5 días / 4 noches / 3 días completos de actividad"
-            price="Desde 340€"
+            price="Desde 360€"
             features={[
               'Alojamiento en Surf house en habitación doble: opción habitación privada o compartida.',
               'Régimen de comidas incluido: Desayuno',

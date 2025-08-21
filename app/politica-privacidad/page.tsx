@@ -5,7 +5,7 @@ export default function PoliticaPrivacidadPage() {
     <>
       <Navbar alwaysSolid />
       <div className="bg-gray-50 py-10">
-        <main className="max-w-3xl mx-auto py-4 px-4 bg-gray-50">
+        <main className="max-w-3xl mx-auto py-20 px-4 bg-gray-50">
           <h1 className="text-3xl font-bold mb-8">Política de privacidad</h1>
           
           <div className="space-y-6 text-gray-700">
