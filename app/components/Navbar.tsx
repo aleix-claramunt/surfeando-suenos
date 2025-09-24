@@ -33,9 +33,9 @@ export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean 
         <div className="flex items-center h-20 justify-between md:justify-center">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink href="/">Inicio</NavLink>
-            <NavLink href="#sobre-nosotros">Sobre nosotros</NavLink>
-            <NavLink href="#viajes">Viajes</NavLink>
+            <NavLink href="#hero">Inicio</NavLink>
+            <NavLink href="#nuestro-destino">Nuestro destino</NavLink>
+            <NavLink href="#experiencias">Experiencias</NavLink>
             <NavLink href="#galeria">Galería</NavLink>
             <NavLink href="#contacto">Contacto</NavLink>
           </div>
@@ -70,14 +70,14 @@ export default function Navbar({ alwaysSolid = false }: { alwaysSolid?: boolean 
         {isMenuOpen && (
           <div className="md:hidden bg-blue-900 absolute left-0 right-0 p-4 shadow-lg border-b border-blue-700" style={{backgroundColor: '#1e3a8a'}}>
             <div className="flex flex-col space-y-4">
-              <MobileNavLink href="/" onClick={() => setIsMenuOpen(false)}>
+              <MobileNavLink href="#hero" onClick={() => setIsMenuOpen(false)}>
                 Inicio
               </MobileNavLink>
-              <MobileNavLink href="#sobre-nosotros" onClick={() => setIsMenuOpen(false)}>
-                Sobre Nosotros
+              <MobileNavLink href="#nuestro-destino" onClick={() => setIsMenuOpen(false)}>
+                Nuestro destino
               </MobileNavLink>
-              <MobileNavLink href="#viajes" onClick={() => setIsMenuOpen(false)}>
-                Viajes
+              <MobileNavLink href="#experiencias" onClick={() => setIsMenuOpen(false)}>
+                Experiencias
               </MobileNavLink>
               <MobileNavLink href="#galeria" onClick={() => setIsMenuOpen(false)}>
                 Galería

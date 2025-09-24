@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import React from 'react'
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ const ContactForm = () => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus('idle')
-    
+
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -25,13 +26,25 @@ const ContactForm = () => {
         body: JSON.stringify(formData),
       })
 
-      if (!res.ok) throw new Error('Request failed')
+      if (!res.ok) {
+        throw new Error(`Request failed: ${res.status}`)
+      }
 
       setSubmitStatus('success')
       setFormData({ name: '', email: '', message: '' })
+
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus('idle')
+      }, 5000)
     } catch (error) {
-      console.error(error)
+      console.error('Contact form error:', error)
       setSubmitStatus('error')
+
+      // Auto-hide error message after 8 seconds
+      setTimeout(() => {
+        setSubmitStatus('idle')
+      }, 8000)
     } finally {
       setIsSubmitting(false)
     }
@@ -45,43 +58,62 @@ const ContactForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div>
-        <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">Nombre *</label>
-        <input 
-          type="text" 
-          id="name" 
-          name="name" 
+        <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">
+          Nombre *
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
           value={formData.name}
           onChange={handleChange}
-          required 
-          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors" 
+          required
+          aria-required="true"
+          aria-describedby="name-help"
+          autoComplete="name"
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors hover:border-gray-500"
+          placeholder="Tu nombre completo"
         />
+        <div id="name-help" className="sr-only">Campo obligatorio para tu nombre</div>
       </div>
       <div>
-        <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">Email *</label>
-        <input 
-          type="email" 
-          id="email" 
-          name="email" 
+        <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
+          Email *
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
           value={formData.email}
           onChange={handleChange}
-          required 
-          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors" 
+          required
+          aria-required="true"
+          aria-describedby="email-help"
+          autoComplete="email"
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors hover:border-gray-500"
+          placeholder="tu@email.com"
         />
+        <div id="email-help" className="sr-only">Campo obligatorio para tu dirección de correo electrónico</div>
       </div>
       <div>
-        <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">Mensaje *</label>
-        <textarea 
-          id="message" 
-          name="message" 
-          rows={4} 
+        <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">
+          Mensaje *
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows={4}
           value={formData.message}
           onChange={handleChange}
-          required 
-          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors" 
-          placeholder="¿En qué podemos ayudarte?" 
+          required
+          aria-required="true"
+          aria-describedby="message-help"
+          className="w-full px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-colors hover:border-gray-500 resize-vertical"
+          placeholder="¿En qué podemos ayudarte? Cuéntanos sobre tu experiencia ideal de surf..."
         />
+        <div id="message-help" className="sr-only">Campo obligatorio para tu mensaje</div>
       </div>
       
       {submitStatus === 'success' && (
@@ -112,11 +144,200 @@ const ContactForm = () => {
   )
 }
 
-export default function Home() {
+const GallerySection = () => {
+  const [selectedImage, setSelectedImage] = useState<number | null>(null)
+  const [imageLoaded, setImageLoaded] = useState(false)
+
+  const galleryImages = [
+    { src: '/gallery4.jpg', alt: 'Surfistas en acción cabalgando las olas perfectas' },
+    { src: '/gallery5.jpg', alt: 'Ambiente relajado del viaje con compañeros de surf' },
+    { src: '/gallery6.jpg', alt: 'Olas perfectas formándose en el océano azul cristalino' },
+    { src: '/gallery7.jpg', alt: 'Atardecer mágico en la costa de Imsouane' },
+    { src: '/gallery8.jpg', alt: 'Grupo de surfistas compartiendo experiencias' },
+    { src: '/gallery9.jpg', alt: 'Vista panorámica de las olas desde la playa' },
+    { src: '/gallery10.jpg', alt: 'Momento de conexión con la naturaleza' },
+    { src: '/gallery11.jpg', alt: 'La perfecta formación de las olas en Imsouane' },
+    { src: '/gallery12.jpg', alt: 'Experiencia auténtica de surf en Marruecos' }
+  ]
+
+  const openModal = (index: number) => {
+    setSelectedImage(index)
+    setImageLoaded(false)
+  }
+
+  const closeModal = () => {
+    setSelectedImage(null)
+  }
+
+  const nextImage = () => {
+    if (selectedImage !== null) {
+      setSelectedImage((selectedImage + 1) % galleryImages.length)
+      setImageLoaded(false)
+    }
+  }
+
+  const prevImage = () => {
+    if (selectedImage !== null) {
+      setSelectedImage((selectedImage - 1 + galleryImages.length) % galleryImages.length)
+      setImageLoaded(false)
+    }
+  }
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (selectedImage !== null) {
+      if (e.key === 'Escape') closeModal()
+      if (e.key === 'ArrowRight') nextImage()
+      if (e.key === 'ArrowLeft') prevImage()
+    }
+  }
+
+  React.useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [selectedImage])
+
   return (
-    <main>
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center">
+    <>
+      <section id="galeria" className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-2">Galería</h2>
+          <p className="text-center text-gray-700 mb-8 text-lg max-w-2xl mx-auto">
+            Descubre algunos de los mejores momentos y paisajes de nuestros últimos viajes de surf.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {galleryImages.map((image, index) => (
+              <div
+                key={index}
+                className="overflow-hidden rounded-lg shadow-lg group cursor-pointer"
+                onClick={() => openModal(index)}
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={400}
+                  height={256}
+                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Modal for larger image view */}
+      {selectedImage !== null && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+          <div className="relative max-w-7xl max-h-full w-full h-full flex items-center justify-center">
+            {/* Close button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2 transition-colors"
+              aria-label="Cerrar galería"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Previous button */}
+            <button
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 bg-black bg-opacity-50 rounded-full p-3 transition-colors z-10"
+              aria-label="Imagen anterior"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            {/* Next button */}
+            <button
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 bg-black bg-opacity-50 rounded-full p-3 transition-colors z-10"
+              aria-label="Siguiente imagen"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            {/* Main image */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              {!imageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                </div>
+              )}
+              <Image
+                src={galleryImages[selectedImage].src}
+                alt={galleryImages[selectedImage].alt}
+                fill
+                className={`object-contain transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoadingComplete={() => setImageLoaded(true)}
+                sizes="100vw"
+              />
+            </div>
+
+            {/* Image counter */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black bg-opacity-50 px-4 py-2 rounded-full">
+              {selectedImage + 1} / {galleryImages.length}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+export default function Home() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TravelAgency',
+    name: 'Surfeando Sueños',
+    description: 'Viajes de surf auténticos que nacen de un sueño, se viven en el mar. Experiencias únicas de surf con alojamiento, clases y yoga.',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://surfeandosuenos.com',
+    telephone: process.env.NEXT_PUBLIC_CONTACT_PHONE,
+    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'ES'
+    },
+    sameAs: [
+      process.env.NEXT_PUBLIC_INSTAGRAM_URL
+    ],
+    offers: [
+      {
+        '@type': 'Offer',
+        name: 'Full Experience: Soul Wave',
+        description: 'Ideal para quienes buscan equilibrio, conexión y aventura en un solo viaje.',
+        category: 'Viaje de Surf Completo'
+      },
+      {
+        '@type': 'Offer',
+        name: 'Easy Flow',
+        description: 'Perfecto para quienes buscan flexibilidad y confort sin perder la esencia del surf trip.',
+        category: 'Viaje de Surf Flexible'
+      },
+      {
+        '@type': 'Offer',
+        name: 'Free Spirit',
+        description: 'Diseñado para surfistas independientes que valoran el bienestar y la comunidad.',
+        category: 'Viaje de Surf Independiente'
+      }
+    ]
+  }
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <main>
+        {/* Hero Section */}
+        <section id="hero" className="relative h-screen flex items-center justify-center" aria-label="Sección principal">
         <div className="absolute inset-0 z-0">
           {/* Video Background */}
           <video
@@ -154,69 +375,142 @@ export default function Home() {
               height={200}
               className="mx-auto mb-8"
             />
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
              Surfeando Sueños
             </h1>
-            <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
               Viajes de surf que nacen de un sueño, se viven en el mar.
             </p>
-            <a href="#viajes" className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-5 px-10 rounded-full shadow-lg transition duration-200 text-lg">
-              Explora nuestros viajes
+            <a
+              href="#experiencias"
+              className="inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-4 sm:py-5 px-8 sm:px-10 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-base sm:text-lg transform hover:-translate-y-1"
+              aria-label="Explorar nuestros viajes de surf"
+            >
+              Vive la aventura
             </a>
           </motion.div>
         </div>
       </section>
 
-      {/* Sobre nosotros Section */}
-      <section id="sobre-nosotros" className="pt-16 pb-8 px-4 bg-gray-50 scroll-mt-12">
+      {/* Nuestro destino: Imsouane Section */}
+      <section id="nuestro-destino" className="pt-8 pb-8 px-4 bg-white scroll-mt-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-10">¡Bienvenido a Surfeando Sueños!</h2>
-          <div className="text-center max-w-4xl mx-auto">
-            {/* Story Content */}
-            <div className="space-y-4">
-              <p className="text-gray-800 text-lg leading-relaxed mb-6">
-                A veces, un solo instante puede cambiarlo todo. Para mí, fue aquel día en que, con 20 años, llegué por sorpresa a la Escuela Cántabra de Surf. Desde la primera ola, supe que había encontrado algo que daría sentido a cada día.
-                <br></br>
-                <br></br>
-                El surf no tardó en convertirse en mi obsesión más sana. Cada viaje, cada plan y cada decisión giraban en torno a él. Pasaron los años y entendí que no era solo un deporte: era mi vida.
-                <br></br>
-                <br></br>
-                Así nació Surfeando Sueños, un proyecto que surgió de esa pasión y que hoy se hace realidad. No es solo un negocio, sino la promesa de compartir contigo todo lo que el surf me ha enseñado.
-                <br></br>
-                <br></br>
-                En esta web encontrarás nuestra historia, nuestros servicios, y todo lo que hemos aprendido a lo largo de los años viviendo el surf en primera persona. Ya sea que estés buscando clases de surf, experiencias en la costa o una comunidad conectada por el mar, aquí tienes un punto de partida.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <div className="text-center">
-                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-6">Nuestro destino: Imsouane</h2>
+          <p className="text-center text-gray-700 mb-12 text-lg max-w-3xl mx-auto">
+            Un pueblo pesquero auténtico en la costa atlántica de Marruecos, donde las olas perfectas se encuentran con la hospitalidad bereber.
+          </p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
+            {/* Imagen principal */}
+            <div className="relative h-96 rounded-lg overflow-hidden shadow-xl">
+              <Image
+                src="/gallery0.jpg"
+                alt="Vista panorámica de Imsouane con sus olas perfectas"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+
+            {/* Contenido descriptivo */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">¿Por qué Imsouane?</h3>
+                <p className="text-gray-800 leading-relaxed">
+                  Imsouane es un tesoro escondido en la costa de Marruecos. Este auténtico pueblo pesquero ofrece algunas de las olas más consistentes y perfectas del mundo, ideales tanto para principiantes como para surfistas avanzados.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-ocean-gradient rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                     </svg>
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">Pasión</h4>
-                  <p className="text-gray-700">Amor profundo por el surf y el océano</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                    </svg>
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">Olas perfectas</h4>
+                    <p className="text-gray-700 text-sm">Rights consistentes de hasta 300m de longitud</p>
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">Autenticidad</h4>
-                  <p className="text-gray-700">Experiencias reales y genuinas</p>
                 </div>
-                
-                <div className="text-center">
-                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
+
+                <div className="flex items-start space-x-3">
+                  <div className="bg-ocean-gradient rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                     </svg>
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">Conexión</h4>
-                  <p className="text-gray-700">Vínculo profundo con el mar</p>
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">Cultura auténtica</h4>
+                    <p className="text-gray-700 text-sm">Hospitalidad bereber y tradición pesquera</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <div className="bg-ocean-gradient rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636a9 9 0 1012.728 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">Clima ideal</h4>
+                    <p className="text-gray-700 text-sm">300+ días de sol al año</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <div className="bg-ocean-gradient rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">Ambiente relajado</h4>
+                    <p className="text-gray-700 text-sm">Alejado del turismo masivo</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Características adicionales */}
+          <div className="bg-gray-50 rounded-xl p-8">
+            <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">Lo que hace especial a Imsouane</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
+                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">The Bay</h4>
+                  <p className="text-gray-700 text-sm">Una de las olas derechas más largas del mundo, perfecta para principiantes</p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
+                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">The Cathedral</h4>
+                  <p className="text-gray-700 text-sm">Ola más potente y técnica, ideal para surfistas con experiencia</p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
+                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Vida local</h4>
+                  <p className="text-gray-700 text-sm">Convive con pescadores locales y descubre la auténtica cultura bereber</p>
                 </div>
               </div>
             </div>
@@ -224,10 +518,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Viajes Section */}
-      <section id="viajes" className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16">
+      {/* Experiencias Section */}
+      <section id="experiencias" className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-6">Viajes</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-6">Experiencias</h2>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
             {/* Full Experience: Soul Wave */}
@@ -412,34 +706,7 @@ export default function Home() {
       </section>
 
       {/* Galería Section */}
-      <section id="galeria"className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-2">Galería</h2>
-          <p className="text-center text-gray-700 mb-8 text-lg max-w-2xl mx-auto">
-            Descubre algunos de los mejores momentos y paisajes de nuestros últimos viajes de surf.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image src="/gallery1.jpg" alt="Surf en Imsouane" width={400} height={256} className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" />
-            </div>
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image src="/gallery2.jpg" alt="Grupo en la playa" width={400} height={256} className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" />
-            </div>
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image src="/gallery3.jpg" alt="Atardecer en  " width={400} height={256} className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" />
-            </div>
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image src="/gallery4.jpg" alt="Surfistas en acción" width={400} height={256} className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" />
-            </div>
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image src="/gallery5.jpg" alt="Ambiente de viaje" width={400} height={256} className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" />
-            </div>
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image src="/gallery6.jpg" alt="Olas perfectas" width={400} height={256} className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" />
-            </div>
-          </div>
-        </div>
-      </section>
+      <GallerySection />
 
       {/* Contacto Section */}
       <section id="contacto" className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16">
@@ -467,6 +734,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

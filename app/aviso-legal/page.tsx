@@ -16,7 +16,7 @@ export default function AvisoLegalPage() {
               </p>
               <ul className="list-disc pl-6 space-y-2">
                 <li><strong>Denominación social:</strong> Surfeando Sueños</li>
-                <li><strong>Responsable:</strong> ${process.env.NEXT_PUBLIC_NAME}</li>
+                <li><strong>Responsable:</strong> {process.env.NEXT_PUBLIC_NAME}</li>
                 <li><strong>Email:</strong> <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`} className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</a></li>
                 <li><strong>Teléfono:</strong> <a href={`tel:${process.env.NEXT_PUBLIC_CONTACT_PHONE_LINK}`} className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_CONTACT_PHONE}</a></li>
               </ul>
