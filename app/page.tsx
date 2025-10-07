@@ -155,9 +155,7 @@ const GallerySection = () => {
     { src: '/gallery7.jpg', alt: 'Atardecer mágico en la costa de Imsouane' },
     { src: '/gallery8.jpg', alt: 'Grupo de surfistas compartiendo experiencias' },
     { src: '/gallery9.jpg', alt: 'Vista panorámica de las olas desde la playa' },
-    { src: '/gallery10.jpg', alt: 'Momento de conexión con la naturaleza' },
-    { src: '/gallery11.jpg', alt: 'La perfecta formación de las olas en Imsouane' },
-    { src: '/gallery12.jpg', alt: 'Experiencia auténtica de surf en Marruecos' }
+    /*{ src: '/gallery10.jpg', alt: 'La perfecta formación de las olas en Imsouane' },*/
   ]
 
   const openModal = (index: number) => {
@@ -393,126 +391,45 @@ export default function Home() {
       </section>
 
       {/* Nuestro destino: Imsouane Section */}
-      <section id="nuestro-destino" className="pt-8 pb-8 px-4 bg-white scroll-mt-16">
+      <section
+        id="nuestro-destino"
+        className="relative py-16 px-4 bg-gradient-to-b from-white via-blue-50/40 to-white scroll-mt-16"
+      >
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-6">Nuestro destino: Imsouane</h2>
-          <p className="text-center text-gray-700 mb-12 text-lg max-w-3xl mx-auto">
-            Un pueblo pesquero auténtico en la costa atlántica de Marruecos, donde las olas perfectas se encuentran con la hospitalidad bereber.
+          {/* Header */}
+          <h2 className="text-5xl font-extrabold text-center text-gray-900 mb-4 tracking-tight">
+            Nuestro destino: Imsouane
+          </h2>
+          <p className="text-center text-gray-600 mb-16 text-lg max-w-2xl mx-auto leading-relaxed">
+            Entre olas infinitas, historia bereber y alma atlántica.
           </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
-            {/* Imagen principal */}
-            <div className="relative h-96 rounded-lg overflow-hidden shadow-xl">
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+            {/* Image Section */}
+            <div className="relative h-[26rem] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-gray-200/40">
               <Image
                 src="/gallery0.jpg"
                 alt="Vista panorámica de Imsouane con sus olas perfectas"
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-500 hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
 
-            {/* Contenido descriptivo */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">¿Por qué Imsouane?</h3>
-                <p className="text-gray-800 leading-relaxed">
-                  Imsouane es un tesoro escondido en la costa de Marruecos. Este auténtico pueblo pesquero ofrece algunas de las olas más consistentes y perfectas del mundo, ideales tanto para principiantes como para surfistas avanzados.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-start space-x-3">
-                  <div className="bg-ocean-gradient rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Olas perfectas</h4>
-                    <p className="text-gray-700 text-sm">Rights consistentes de hasta 300m de longitud</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <div className="bg-ocean-gradient rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Cultura auténtica</h4>
-                    <p className="text-gray-700 text-sm">Hospitalidad bereber y tradición pesquera</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <div className="bg-ocean-gradient rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636a9 9 0 1012.728 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Clima ideal</h4>
-                    <p className="text-gray-700 text-sm">300+ días de sol al año</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <div className="bg-ocean-gradient rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Ambiente relajado</h4>
-                    <p className="text-gray-700 text-sm">Alejado del turismo masivo</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Características adicionales */}
-          <div className="bg-gray-50 rounded-xl p-8">
-            <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">Lo que hace especial a Imsouane</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="bg-white rounded-lg p-6 shadow-lg">
-                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">The Bay</h4>
-                  <p className="text-gray-700 text-sm">Una de las olas derechas más largas del mundo, perfecta para principiantes</p>
-                </div>
-              </div>
-
-              <div className="text-center">
-                <div className="bg-white rounded-lg p-6 shadow-lg">
-                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">The Cathedral</h4>
-                  <p className="text-gray-700 text-sm">Ola más potente y técnica, ideal para surfistas con experiencia</p>
-                </div>
-              </div>
-
-              <div className="text-center">
-                <div className="bg-white rounded-lg p-6 shadow-lg">
-                  <div className="bg-ocean-gradient rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">Vida local</h4>
-                  <p className="text-gray-700 text-sm">Convive con pescadores locales y descubre la auténtica cultura bereber</p>
-                </div>
-              </div>
+            {/* Text Content */}
+            <div className="space-y-6 bg-white/70 backdrop-blur-sm rounded-2xl shadow-md p-8 border border-gray-100">
+              <p className="text-gray-800 leading-relaxed">
+                Bienvenido a <b>Imsouane</b>, un pequeño pueblo de pescadores en la costa atlántica de Marruecos que se ha convertido en un <b>paraíso para surfistas de todo el mundo</b>. Rodeado de montañas y bañado por una de las <b>olas más largas de África</b>, Imsouane es mucho más que un spot de surf: es un lugar donde el tiempo parece detenerse.
+                <br /><br />
+                Con raíces <b>bereberes ancestrales</b>, su puerto pesquero aún conserva la esencia de lo auténtico:
+                <br /><br />
+                Cada tarde, los pescadores regresan tras su jornada, mientras el sol cae sobre el océano
+                <br /><br />
+                Su magia reside en la combinación perfecta entre <b>naturaleza virgen</b>, <b>vida local tranquila</b> y una comunidad de surf <b>abierta</b> y <b>multicultural</b>.
+                <br /><br />
+                Ya sea que busques surfear, desconectar o reconectar, Imsouane te espera con los brazos abiertos… y con olas que no querrás soltar.
+              </p>
             </div>
           </div>
         </div>
@@ -660,7 +577,7 @@ export default function Home() {
               <div className="p-6">
                 <h3 className="text-xl font-bold text-black mb-3">Free Spirit</h3>
                 <p className="text-gray-800 mb-4 text-sm">
-                  Diseñado para surfistas independientes que valoran el bienestar y la comunidad
+                  Diseñado para surfistas independientes que valoran el bienestar y la comunidad.
                 </p>
                 
                 <div className="space-y-3 mb-4">
@@ -727,7 +644,6 @@ export default function Home() {
                 <span className="text-gray-800"> {process.env.NEXT_PUBLIC_NAME}</span>
               </li>               
                 <li><span className="font-bold text-gray-800">Email:</span> <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`} className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</a></li>
-                <li><span className="font-bold text-gray-800">Teléfono:</span> <a href={`tel:${process.env.NEXT_PUBLIC_CONTACT_PHONE_LINK}`} className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_CONTACT_PHONE}</a></li>
                 <li><span className="font-bold text-gray-800">Instagram:</span> <a href={process.env.NEXT_PUBLIC_INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{process.env.NEXT_PUBLIC_INSTAGRAM_HANDLE}</a></li>
               </ul>
             </div>

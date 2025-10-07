@@ -68,7 +68,7 @@ export default function FreeSpiritPage() {
         {/* Package Cards */}
         <section className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6 pb-10">
           <PackageCard
-            title="Solo desayuno / 7 Días"
+            title="Pensión Completa / 7 Días"
             duration="Duración: 7 días / 6 noches / 5 días completos de actividad"
             price="Desde 516€"
             features={[
@@ -81,7 +81,7 @@ export default function FreeSpiritPage() {
             message="¡Hola! Me gustaría reservar un paquete Free Spirit de 7 días. ¿Hablamos?"
           />
           <PackageCard
-            title="Solo desayuno / 5 Días"
+            title="Pensión Completa / 5 Días"
             duration="Duración: 5 días / 4 noches / 3 días completos de actividad"
             price="Desde 360€"
             features={[
