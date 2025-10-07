@@ -10,6 +10,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: 'Surfeando Sueños - Viajes de Surf Auténticos | Surf Trips',
   description: 'Descubre viajes de surf únicos que nacen de un sueño y se viven en el mar. Experiencias auténticas de surf con alojamiento, clases y yoga en destinos increíbles.',
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   keywords: ['surf', 'viajes de surf', 'surf trips', 'clases de surf', 'yoga', 'aventura', 'océano', 'vacaciones de surf'],
   authors: [{ name: 'Surfeando Sueños' }],
   creator: 'Surfeando Sueños',

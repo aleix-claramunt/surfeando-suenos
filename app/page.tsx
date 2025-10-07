@@ -393,7 +393,7 @@ export default function Home() {
       {/* Nuestro destino: Imsouane Section */}
       <section
         id="nuestro-destino"
-        className="relative py-16 px-4 bg-gradient-to-b from-white via-blue-50/40 to-white scroll-mt-16"
+        className="pt-8 pb-8 px-4 bg-gray-50 scroll-mt-16"
       >
         <div className="max-w-6xl mx-auto">
           {/* Header */}
